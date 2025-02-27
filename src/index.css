@@ -1,0 +1,39 @@
+@import "tailwindcss";
+
+:root {
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: black;
+  /* background-color: white; */
+  @apply bg-slate-950;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* body {
+  @apply bg-radial-[at_75%_70%] from-[#5936b4] to-40% to-[#362a84];
+} */
+
+@theme {
+  --color-primary: #48319d;
+  --color-secondary: #1f1d47;
+  --color-pink-200: #c427fb;
+  --color-pink-100: #e0d9ff;
+}
+
+@layer base {
+  .bg-linear-gradient-1 {
+    @apply bg-linear-to-br from-[#2e335a] to-[#1c1b33];
+  }
+  .bg-linear-gradient-2 {
+    @apply bg-linear-to-br from-[#5936b4] to-[#362a84];
+  }
+  .bg-linear-gradient-3 {
+    @apply bg-linear-to-br from-[#427bd1] to-[#c159ec];
+  }
+}
