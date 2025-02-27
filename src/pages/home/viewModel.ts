@@ -5,6 +5,7 @@ import axios from "axios";
 
 const API_KEY = "06c2610e6d4a44a5a5544653252102";
 const API_URL = "https://api.weatherapi.com/v1/";
+const MAP_API = "https://nominatim.openstreetmap.org/search";
 
 const useViewModel = () => {
   const [city, setCity] = useState("");
@@ -13,6 +14,18 @@ const useViewModel = () => {
   const [error, setError] = useState<any>(null);
   const [center, setCenter] = useState<LatLngExpression>([0, 0]);
 
+  const getEnglishCityName = async (thaiCity: string) => {
+    const response = await axios.get(MAP_API, {
+      params: {
+        q: thaiCity,
+        format: "json",
+        accept_language: "en",
+      },
+    });
+
+    return response.data[0]?.display_name ?? undefined;
+  };
+
   const fetchWeather = async (cityName: any) => {
     setLoading(true);
     setError(null);
@@ -20,11 +33,12 @@ const useViewModel = () => {
       const response = await axios.get(API_URL + "forecast.json", {
         params: {
           key: API_KEY,
-          q: cityName,
+          q: (await getEnglishCityName(cityName)) ?? cityName,
           lang: "th",
           days: 7,
         },
       });
+
       setWeather(response.data);
       setCenter([response.data.location.lat, response.data.location.lon]);
       setCity("");
@@ -44,12 +58,14 @@ const useViewModel = () => {
 
   useEffect(() => {
     if (mapRef.current) {
-      mapRef.current.setView(center, 10); // Updates center when changed
+      mapRef.current.setView(center, 10);
     }
   }, [center]);
+
   useEffect(() => {
     fetchWeather("Chiang Mai");
   }, []);
+
   const MapUpdater = ({ center }: { center: LatLngExpression }) => {
     const map = useMap();
 
